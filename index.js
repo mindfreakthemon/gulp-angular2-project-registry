@@ -34,7 +34,7 @@ class CustomRegistry extends DefaultRegistry {
 		gulp.task('watch', gulp.parallel('css:watch', 'templates:watch', 'css:watch', 'styles:watch', 'app:watch', 'pages:watch', 'statics:watch'));
 
 		gulp.task('dev', gulp.series('clean', gulp.parallel('vendor', 'compile', 'connect')));
-		gulp.task('dev:prod', gulp.series('clean', gulp.parallel('vendor', 'compile:prod', 'connect', 'watch')));
+		gulp.task('dev:prod', gulp.series('clean', gulp.parallel('vendor', 'compile:prod', 'connect')));
 	}
 }
 
