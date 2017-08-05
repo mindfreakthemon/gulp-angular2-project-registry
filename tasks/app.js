@@ -47,6 +47,7 @@ module.exports = (gulp) => {
 		return builder.bundle('app', 'build/bundle/app.min.js', { minify: true });
 	}));
 
-	gulp.task('app:watch', () => gulp.watch(APP_SRC_GLOB, gulp.task('app')));
+	gulp.task('app:watch', () => gulp.watch(APP_SRC_GLOB, { ignored: '**/.gulp-tsc-tmp*.ts' }, gulp.task('app')));
 };
 
+``
