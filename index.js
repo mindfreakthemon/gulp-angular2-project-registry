@@ -12,7 +12,7 @@ const clean = require('./tasks/clean');
 const test = require('./tasks/test');
 const tslint = require('./tasks/tslint');
 
-class WebAngular2GulpRegistry extends DefaultRegistry {
+class CustomRegistry extends DefaultRegistry {
 	init(gulp) {
 
 		css(gulp);
@@ -38,4 +38,4 @@ class WebAngular2GulpRegistry extends DefaultRegistry {
 	}
 }
 
-module.exports = WebAngular2GulpRegistry;
+module.exports = CustomRegistry;
