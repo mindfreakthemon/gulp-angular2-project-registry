@@ -1,7 +1,7 @@
 {
 	"name": "gulp-angular2-project-registry",
 	"description": "Collection of tasks to build, deploy and serve angular2 web application.",
-	"version": "0.0.5",
+	"version": "0.0.6",
 	"license": "MIT",
 	"peerDependencies": {
 		"@angular/common": "^4.1.0",
@@ -34,18 +34,18 @@
 	},
 	"dependencies": {
 		"gulp-concat": "^2.6.1",
-		"gulp-connect": "^5.0.0",
-		"gulp-inject": "^4.2.0",
-		"gulp-inline-ng2-template": "^4.0.0",
+		"gulp-connect": "^5.5.0",
+		"gulp-inject": "^4.3.2",
+		"gulp-inline-ng2-template": "^4.1.0",
 		"gulp-inline-source": "^3.1.0",
-		"gulp-plumber": "^1.1.0",
-		"gulp-postcss": "^7.0.0",
-		"gulp-pug": "^3.3.0",
-		"gulp-spawn-mocha": "^3.3.0",
-		"gulp-stylus": "^2.6.0",
+		"gulp-plumber": "^1.2.0",
+		"gulp-postcss": "^7.0.1",
+		"gulp-pug": "^4.0.1",
+		"gulp-spawn-mocha": "^5.0.1",
+		"gulp-stylus": "^2.7.0",
 		"gulp-tsc": "^1.3.2",
-		"gulp-tslint": "^8.0.0",
+		"gulp-tslint": "^8.1.3",
 		"gulp-uglify": "^3.0.0",
-		"undertaker-registry": "^1.0.0"
+		"undertaker-registry": "^1.0.1"
 	}
 }
