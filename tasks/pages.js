@@ -4,11 +4,14 @@ let plumber = require('gulp-plumber');
 let inject = require('gulp-inject');
 let inline = require('gulp-inline-source');
 let series = require('stream-series');
+let del = require('del');
 
 const PAGES_SRC_GLOB = 'assets/index.pug';
 const PAGES_OUT_DIR = '.';
 
 module.exports = (gulp) => {
+	gulp.task('pages:clean', () => del([path.join(PAGES_OUT_DIR, 'index.html')]));
+
 	/**
 	 * Injects vendor bundle into js section and all css files into css section.
 	 */

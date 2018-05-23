@@ -13,12 +13,18 @@ const test = require('./tasks/test');
 const tslint = require('./tasks/tslint');
 
 class CustomRegistry extends DefaultRegistry {
-	init(gulp) {
 
+	constructor(options) {
+		super();
+
+		this.options = options || {};
+	}
+
+	init(gulp) {
 		css(gulp);
 		styles(gulp);
 		templates(gulp);
-		vendor(gulp);
+		vendor(gulp, this.options.vendor);
 		app(gulp);
 		statics(gulp);
 		pages(gulp);
@@ -34,7 +40,7 @@ class CustomRegistry extends DefaultRegistry {
 		gulp.task('watch', gulp.parallel('css:watch', 'templates:watch', 'css:watch', 'styles:watch', 'app:watch', 'pages:watch', 'statics:watch'));
 
 		gulp.task('dev', gulp.series('clean', gulp.parallel('vendor', 'compile', 'connect')));
-		gulp.task('dev:prod', gulp.series('clean', gulp.parallel('vendor', 'compile:prod', 'connect')));
+		gulp.task('prod', gulp.series('clean', gulp.parallel('vendor', 'compile:prod', 'connect')));
 	}
 }
 

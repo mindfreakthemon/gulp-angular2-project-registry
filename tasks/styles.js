@@ -10,12 +10,12 @@ const STYLES_OUT_DIR = 'build';
 const STYLUS_AUTOPREFIXER = { browsers: ['last 2 versions'] };
 
 module.exports = (gulp) => {
-	gulp.task('styles:clear', () => del([`${STYLES_OUT_DIR}/**/*.styl`]));
+	gulp.task('styles:clean', () => del([`${STYLES_OUT_DIR}/**/*.styl`]));
 
 	/**
 	 * Compiles templates.
 	 */
-	gulp.task('styles', gulp.series('styles:clear', () => {
+	gulp.task('styles', gulp.series('styles:clean', () => {
 		return gulp.src(STYLES_SRC_GLOB, { base: '.' })
 			.pipe(plumber())
 			.pipe(stylus({ pretty: true }))

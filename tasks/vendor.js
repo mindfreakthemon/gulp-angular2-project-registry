@@ -14,12 +14,19 @@ const DYNAMIC_VENDOR_LIST = [
 	'node_modules/rxjs/**/*.js'
 ];
 
-module.exports = (gulp) => {
+module.exports = (gulp, options) => {
+
+	options = Object.assign({
+		statics: [],
+		dynamics: []
+	}, options);
+
+
 	/**
 	 * Copies vendors that are being required in runtime.
 	 */
 	gulp.task('vendor:dynamic', () => {
-		return gulp.src(DYNAMIC_VENDOR_LIST, { base: 'node_modules' })
+		return gulp.src(DYNAMIC_VENDOR_LIST.concat(options.dynamics), { base: 'node_modules' })
 			.pipe(gulp.dest('build/vendor'))
 			.pipe(connect.reload());
 	});
@@ -28,7 +35,7 @@ module.exports = (gulp) => {
 	 * Copies vendors that are statically linked in html page.
 	 */
 	gulp.task('vendor:static', () => {
-		return gulp.src(VENDOR_LIST, { base: 'node_modules' })
+		return gulp.src(VENDOR_LIST.concat(options.statics), { base: 'node_modules' })
 			.pipe(concat('vendor.js'))
 			.pipe(uglify())
 			.pipe(gulp.dest('build/bundle'))

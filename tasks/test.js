@@ -8,12 +8,12 @@ const TEST_OUT_DIR = 'build/test';
 
 module.exports = (gulp) => {
 
-	gulp.task('test:clear', () => del([TEST_OUT_DIR]));
+	gulp.task('test:clean', () => del([TEST_OUT_DIR]));
 
 	/**
 	 * Compiles typescript application and copies it to app dir.
 	 */
-	gulp.task('test:compile', gulp.series('test:clear', () => {
+	gulp.task('test:compile', gulp.series('test:clean', () => {
 		let compilerOptions = require('../tsconfig.json').compilerOptions;
 
 		return gulp.src(['typings/index.d.ts', TEST_SRC_GLOB])

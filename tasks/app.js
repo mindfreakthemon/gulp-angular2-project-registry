@@ -1,4 +1,4 @@
-const typescript = require('gulp-tsc');
+const typescript = require('gulp-typescript');
 const connect = require('gulp-connect');
 const plumber = require('gulp-plumber');
 const embed = require('gulp-inline-ng2-template');
@@ -11,17 +11,17 @@ const APP_OUT_DIR = 'build/app';
 
 module.exports = (gulp) => {
 
-	gulp.task('app:clear', () => del([`${APP_OUT_DIR}/**/*.js`]));
+	gulp.task('app:clean', () => del([`${APP_OUT_DIR}/**/*.js`]));
 
 	/**
 	 * Compiles typescript application and copies it to app dir.
 	 */
-	gulp.task('app', gulp.series('app:clear', () => {
-		let compilerOptions = require(path.join(process.cwd(), 'tsconfig.json')).compilerOptions;
+	gulp.task('app', gulp.series('app:clean', () => {
+		let project = typescript.createProject(path.join(process.cwd(), 'tsconfig.json'))
 
 		return gulp.src([APP_SRC_GLOB])
 			.pipe(plumber())
-			.pipe(typescript(compilerOptions))
+			.pipe(project())
 			.pipe(gulp.dest(APP_OUT_DIR))
 			.pipe(connect.reload());
 	}));
@@ -49,5 +49,3 @@ module.exports = (gulp) => {
 
 	gulp.task('app:watch', () => gulp.watch(APP_SRC_GLOB, { ignored: '**/.gulp-tsc-tmp*.ts' }, gulp.task('app')));
 };
-
-``

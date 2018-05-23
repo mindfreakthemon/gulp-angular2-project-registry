@@ -5,12 +5,12 @@ const STATICS_SRC_GLOB = 'assets/statics/**/*';
 const STATICS_OUT_DIR = 'build/statics';
 
 module.exports = (gulp) =>{
-	gulp.task('statics:clear', () => del([STATICS_OUT_DIR]));
+	gulp.task('statics:clean', () => del([STATICS_OUT_DIR]));
 
 	/**
 	 * Copies all statics to statics dir.
 	 */
-	gulp.task('statics', gulp.series('statics:clear', () => {
+	gulp.task('statics', gulp.series('statics:clean', () => {
 		return gulp.src(STATICS_SRC_GLOB)
 			.pipe(gulp.dest(STATICS_OUT_DIR))
 			.pipe(connect.reload());

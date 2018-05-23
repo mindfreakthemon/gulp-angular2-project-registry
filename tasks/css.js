@@ -11,12 +11,12 @@ const STYLUS_OUT_DIR = 'build/css';
 const STYLUS_AUTOPREFIXER = { browsers: ['last 2 versions'] };
 
 module.exports = (gulp) => {
-	gulp.task('css:clear', () => del([STYLUS_OUT_DIR]));
+	gulp.task('css:clean', () => del([STYLUS_OUT_DIR]));
 
 	/**
 	 * Compiles each styl file and places it in css dir.
 	 */
-	gulp.task('css', gulp.series('css:clear', () => {
+	gulp.task('css', gulp.series('css:clean', () => {
 		return gulp.src(STYLUS_SRC_GLOB)
 			.pipe(plumber())
 			.pipe(stylus({
@@ -33,7 +33,7 @@ module.exports = (gulp) => {
 	 * Compiles each styl file into one build.main.css and places it in css dir.
 	 * Inlines all the images via base64 data URI.
 	 */
-	gulp.task('css:prod', gulp.series('css:clear', () => {
+	gulp.task('css:prod', gulp.series('css:clean', () => {
 		return gulp.src(STYLUS_SRC_GLOB)
 			.pipe(plumber())
 			.pipe(stylus({
