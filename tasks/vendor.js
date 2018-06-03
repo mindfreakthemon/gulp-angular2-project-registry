@@ -1,47 +1,21 @@
-let connect = require('gulp-connect');
-let concat = require('gulp-concat');
-let uglify = require('gulp-uglify');
+const concat = require('gulp-concat');
+const uglify = require('gulp-uglify');
+const path = require('path');
 
-const VENDOR_LIST = [
-	'node_modules/core-js/client/shim.min.js',
-	'node_modules/zone.js/dist/zone.min.js',
-	'node_modules/reflect-metadata/Reflect.js',
-	'node_modules/systemjs/dist/system.js'
-];
 
-const DYNAMIC_VENDOR_LIST = [
-	'node_modules/@angular/*/bundles/*.js',
-	'node_modules/rxjs/**/*.js'
+const STATIC_VENDOR_LIST = [
+	'node_modules/systemjs/dist/system.js',
+	path.resolve(__dirname, '..', 'config/systemjs.base-config.js')
 ];
 
 module.exports = (gulp, options) => {
-
-	options = Object.assign({
-		statics: [],
-		dynamics: []
-	}, options);
-
-
-	/**
-	 * Copies vendors that are being required in runtime.
-	 */
-	gulp.task('vendor:dynamic', () => {
-		return gulp.src(DYNAMIC_VENDOR_LIST.concat(options.dynamics), { base: 'node_modules' })
-			.pipe(gulp.dest('build/vendor'))
-			.pipe(connect.reload());
-	});
-
 	/**
 	 * Copies vendors that are statically linked in html page.
 	 */
-	gulp.task('vendor:static', () => {
-		return gulp.src(VENDOR_LIST.concat(options.statics), { base: 'node_modules' })
-			.pipe(concat('vendor.js'))
+	gulp.task('vendor', () => {
+		return gulp.src(STATIC_VENDOR_LIST.concat(options.vendors), { base: 'node_modules' })
+			.pipe(concat(options.paths.vendorBundlePath))
 			.pipe(uglify())
-			.pipe(gulp.dest('build/bundle'))
-			.pipe(connect.reload());
+			.pipe(gulp.dest(options.paths.buildDir));
 	});
-
-
-	gulp.task('vendor', gulp.parallel('vendor:static', 'vendor:dynamic'));
 };

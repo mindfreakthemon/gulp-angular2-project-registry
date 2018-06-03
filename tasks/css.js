@@ -1,40 +1,40 @@
-let stylus = require('gulp-stylus');
-let connect = require('gulp-connect');
-let postcss = require('gulp-postcss');
-let plumber = require('gulp-plumber');
-let concat = require('gulp-concat');
-let del = require('del');
-let autoprefixer = require('autoprefixer');
+const stylus = require('gulp-stylus');
+const connect = require('gulp-connect');
+const postcss = require('gulp-postcss');
+const plumber = require('gulp-plumber');
+const concat = require('gulp-concat');
+const del = require('del');
+const autoprefixer = require('autoprefixer');
 
-const STYLUS_SRC_GLOB = 'assets/styles/**/*.styl';
-const STYLUS_OUT_DIR = 'build/css';
-const STYLUS_AUTOPREFIXER = { browsers: ['last 2 versions'] };
 
-module.exports = (gulp) => {
-	gulp.task('css:clean', () => del([STYLUS_OUT_DIR]));
+module.exports = (gulp, options) => {
+	const cssSrcGlob = `${options.paths.cssDir}/**/*.styl`;
+	const cssOutDir = `${options.paths.buildDir}/css`;
+
+	gulp.task('css:clean', () => del([cssOutDir]));
 
 	/**
 	 * Compiles each styl file and places it in css dir.
 	 */
-	gulp.task('css', gulp.series('css:clean', () => {
-		return gulp.src(STYLUS_SRC_GLOB)
+	gulp.task('css', () => {
+		return gulp.src(cssSrcGlob)
 			.pipe(plumber())
 			.pipe(stylus({
 				pretty: true
 			}))
 			.pipe(postcss([
-				autoprefixer(STYLUS_AUTOPREFIXER)
+				autoprefixer(options.autoprefixer)
 			]))
-			.pipe(gulp.dest(STYLUS_OUT_DIR))
+			.pipe(gulp.dest(cssOutDir))
 			.pipe(connect.reload());
-	}));
+	});
 
 	/**
-	 * Compiles each styl file into one build.main.css and places it in css dir.
+	 * Compiles each styl file into one bundle and places it in css dir.
 	 * Inlines all the images via base64 data URI.
 	 */
-	gulp.task('css:prod', gulp.series('css:clean', () => {
-		return gulp.src(STYLUS_SRC_GLOB)
+	gulp.task('css:bundle', () => {
+		return gulp.src(cssSrcGlob)
 			.pipe(plumber())
 			.pipe(stylus({
 				compress: true,
@@ -45,13 +45,11 @@ module.exports = (gulp) => {
 				}
 			}))
 			.pipe(postcss([
-				autoprefixer(STYLUS_AUTOPREFIXER)
+				autoprefixer(options.autoprefixer)
 			]))
-			.pipe(concat('bundle.min.css'))
-			.pipe(gulp.dest(STYLUS_OUT_DIR))
-			.pipe(connect.reload());
-	}));
+			.pipe(concat(options.paths.cssBundlePath))
+			.pipe(gulp.dest(options.paths.buildDir));
+	});
 
-	gulp.task('css:watch', () => gulp.watch(STYLUS_SRC_GLOB, gulp.task('css')));
-
+	gulp.task('css:watch', () => gulp.watch(cssSrcGlob, gulp.task('css')));
 };

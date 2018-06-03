@@ -3,49 +3,72 @@ const connect = require('gulp-connect');
 const plumber = require('gulp-plumber');
 const embed = require('gulp-inline-ng2-template');
 const del = require('del');
-const Builder = require('systemjs-builder');
 const path = require('path');
+const Builder = require('systemjs-builder');
 
-const APP_SRC_GLOB = 'app/**/*.ts';
-const APP_OUT_DIR = 'build/app';
 
-module.exports = (gulp) => {
+module.exports = (gulp, options) => {
+	const appSrcGlob = `${options.paths.sourceDir}/**/*.ts`;
+	const appOutDir = `${options.paths.buildDir}/app`;
+	const bundlePath = `${options.paths.buildDir}/${options.paths.appBundlePath}`;
 
-	gulp.task('app:clean', () => del([`${APP_OUT_DIR}/**/*.js`]));
+	const project = typescript.createProject(options.paths.tsconfigPath);
+
+	gulp.task('app:clean', () => del([`${appOutDir}/**/*.js`]));
 
 	/**
 	 * Compiles typescript application and copies it to app dir.
 	 */
-	gulp.task('app', gulp.series('app:clean', () => {
-		let project = typescript.createProject(path.join(process.cwd(), 'tsconfig.json'))
-
-		return gulp.src([APP_SRC_GLOB])
+	gulp.task('app', () => {
+		return gulp.src([appSrcGlob])
 			.pipe(plumber())
 			.pipe(project())
-			.pipe(gulp.dest(APP_OUT_DIR))
+			.pipe(gulp.dest(appOutDir))
 			.pipe(connect.reload());
-	}));
+	});
 
 	/**
 	 * Embeds compiled templates & styles into compiled application.
 	 */
 	gulp.task('app:embed', gulp.series('app', 'styles', 'templates', () => {
-		return gulp.src(`${APP_OUT_DIR}/**/*.js`, { base: APP_OUT_DIR })
+		return gulp.src(`${appOutDir}/**/*.js`, { base: appOutDir })
 			.pipe(embed({
 				target: 'es5',
 				useRelativePaths: true
 			}))
-			.pipe(gulp.dest(APP_OUT_DIR));
+			.pipe(gulp.dest(appOutDir));
 	}));
 
 	/**
 	 * Bundles application into one file, along with RxJS and Angular2.
 	 */
-	gulp.task('app:prod', gulp.series('app:embed', 'vendor', () => {
-		var builder = new Builder('.', './systemjs.config.js');
+	gulp.task('app:bundle', gulp.series('app:embed', 'vendor', () => {
+		const builder = new Builder('.', path.resolve(__dirname, '..', 'config/systemjs.base-config.js'));
 
-		return builder.bundle('app', 'build/bundle/app.min.js', { minify: true });
+		builder.config({
+			map: {
+				app: appOutDir
+			},
+			packages: {
+				app: {
+					main: 'main.js',
+					defaultExtension: 'js'
+				}
+			}
+		});
+
+		return builder.bundle('app', bundlePath, {
+			minify: true,
+
+			// TODO fix the issue with spaces in paths
+			fetch: (load, fetch) => {
+				load.name = load.name.replace('%20', ' ');
+				load.address = load.address.replace('%20', ' ');
+
+				return fetch(load);
+			}
+		});
 	}));
 
-	gulp.task('app:watch', () => gulp.watch(APP_SRC_GLOB, { ignored: '**/.gulp-tsc-tmp*.ts' }, gulp.task('app')));
+	gulp.task('app:watch', () => gulp.watch(appSrcGlob, { ignored: '**/.gulp-tsc-tmp*.ts' }, gulp.task('app')));
 };

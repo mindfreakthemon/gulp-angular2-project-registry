@@ -14,25 +14,48 @@ const tslint = require('./tasks/tslint');
 
 class CustomRegistry extends DefaultRegistry {
 
+
 	constructor(options) {
 		super();
 
-		this.options = options || {};
+		this.options = Object.assign({
+			vendors: [],
+			port: 8080
+		}, options);
+
+		this.options.paths = Object.assign({
+			sourceDir: 'app',
+			cssDir: 'assets/styles',
+			buildDir: 'build',
+
+			tsconfigPath: 'tsconfig.json',
+
+			appBundlePath: 'bundle/app.min.js',
+			cssBundlePath: 'bundle/bundle.min.css',
+			vendorBundlePath: 'bundle/vendor.min.js',
+
+			entrypointPath: 'index.html'
+
+		}, this.options.paths);
+
+		this.options.autoprefixer = Object.assign({
+			browsers: ['last 2 versions']
+		}, this.options.autoprefixer);
 	}
 
+
 	init(gulp) {
-		css(gulp);
-		styles(gulp);
-		templates(gulp);
-		vendor(gulp, this.options.vendor);
-		app(gulp);
+		css(gulp, this.options);
+		styles(gulp, this.options);
+		templates(gulp, this.options);
+		vendor(gulp, this.options);
+		app(gulp, this.options);
+		connect(gulp, this.options);
 		statics(gulp);
 		pages(gulp);
-		connect(gulp);
 		clean(gulp);
 		test(gulp);
 		tslint(gulp);
-
 
 		gulp.task('compile', gulp.parallel('statics', 'app', 'templates', 'styles', 'css', 'pages'));
 		gulp.task('compile:prod', gulp.parallel('statics', 'pages:prod'));

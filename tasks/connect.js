@@ -1,11 +1,11 @@
 let connect = require('gulp-connect');
 
-module.exports = (gulp) => {
+module.exports = (gulp, options) => {
 
 	gulp.task('connect', () => {
 		return connect.server({
-			root: '.',
-			port: 8080,
+			root: options.paths.buildDir,
+			port: options.port,
 			livereload: true
 		});
 	});

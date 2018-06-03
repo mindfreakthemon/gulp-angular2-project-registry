@@ -9,13 +9,13 @@
 | app:clean ||
 | app ||
 | app:embed ||
-| app:prod ||
+| app:bundle ||
 | styles:clean ||
 | styles ||
 | styles:watch ||
 | css:clean ||
 | css ||
-| css:prod ||
+| css:bundle ||
 | css:watch ||
 | pages:clean ||
 | pages ||

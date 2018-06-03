@@ -10,11 +10,11 @@ module.exports = (gulp) =>{
 	/**
 	 * Copies all statics to statics dir.
 	 */
-	gulp.task('statics', gulp.series('statics:clean', () => {
+	gulp.task('statics', () => {
 		return gulp.src(STATICS_SRC_GLOB)
 			.pipe(gulp.dest(STATICS_OUT_DIR))
 			.pipe(connect.reload());
-	}));
+	});
 
 	gulp.task('statics:watch', () => gulp.watch(STATICS_SRC_GLOB, gulp.task('statics')));
 };

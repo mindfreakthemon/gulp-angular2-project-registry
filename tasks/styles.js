@@ -1,30 +1,30 @@
-let stylus = require('gulp-stylus');
-let connect = require('gulp-connect');
-let postcss = require('gulp-postcss');
-let plumber = require('gulp-plumber');
-let del = require('del');
-let autoprefixer = require('autoprefixer');
+const stylus = require('gulp-stylus');
+const connect = require('gulp-connect');
+const postcss = require('gulp-postcss');
+const plumber = require('gulp-plumber');
+const del = require('del');
+const autoprefixer = require('autoprefixer');
 
-const STYLES_SRC_GLOB = 'app/**/*.styl';
-const STYLES_OUT_DIR = 'build';
-const STYLUS_AUTOPREFIXER = { browsers: ['last 2 versions'] };
 
-module.exports = (gulp) => {
-	gulp.task('styles:clean', () => del([`${STYLES_OUT_DIR}/**/*.styl`]));
+module.exports = (gulp, options) => {
+	const stylesSrcGlob = `${options.paths.sourceDir}/**/*.styl`;
+	const stylesOutDir = `${options.paths.buildDir}/app`;
+
+	gulp.task('styles:clean', () => del([`${stylesOutDir}/**/*.styl`]));
 
 	/**
 	 * Compiles templates.
 	 */
-	gulp.task('styles', gulp.series('styles:clean', () => {
-		return gulp.src(STYLES_SRC_GLOB, { base: '.' })
+	gulp.task('styles', () => {
+		return gulp.src(stylesSrcGlob, { base: options.paths.sourceDir })
 			.pipe(plumber())
 			.pipe(stylus({ pretty: true }))
 			.pipe(postcss([
-				autoprefixer(STYLUS_AUTOPREFIXER)
+				autoprefixer(options.autoprefixer)
 			]))
-			.pipe(gulp.dest(STYLES_OUT_DIR))
+			.pipe(gulp.dest(stylesOutDir))
 			.pipe(connect.reload());
-	}));
+	});
 
-	gulp.task('styles:watch', () => gulp.watch(STYLES_SRC_GLOB, gulp.task('styles')));
+	gulp.task('styles:watch', () => gulp.watch(stylesSrcGlob, gulp.task('styles')));
 };
