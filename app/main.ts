@@ -1,4 +1,4 @@
-import 'zone';
+import 'zone.js';
 
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 

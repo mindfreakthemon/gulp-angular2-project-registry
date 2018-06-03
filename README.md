@@ -23,7 +23,6 @@
 | pages:watch ||
 | templates:clean ||
 | templates ||
-| templates:prod ||
 | templates:watch ||
 | vendor:dynamic ||
 | vendor:static ||
@@ -39,7 +38,7 @@
 | tslint:test ||
 | tslint ||
 | compile ||
-| compile:prod ||
+| compile:bundle ||
 | watch ||
 | dev ||
-| prod ||
+| bundle ||

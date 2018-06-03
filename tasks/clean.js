@@ -1,5 +1,5 @@
-let del = require('del');
+const del = require('del');
 
-module.exports = (gulp) => {
-	gulp.task('clean', () => del(['build']));
+module.exports = (gulp, options) => {
+	gulp.task('clean', () => del([options.paths.buildDir]));
 };

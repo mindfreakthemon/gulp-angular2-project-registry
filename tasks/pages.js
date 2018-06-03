@@ -6,48 +6,61 @@ let inline = require('gulp-inline-source');
 let series = require('stream-series');
 let del = require('del');
 
-const PAGES_SRC_GLOB = 'assets/index.pug';
-const PAGES_OUT_DIR = '.';
 
-module.exports = (gulp) => {
-	gulp.task('pages:clean', () => del([path.join(PAGES_OUT_DIR, 'index.html')]));
+module.exports = (gulp, options) => {
+	const pagesOutDir = options.paths.buildDir;
+
+	gulp.task('pages:clean', () => del([path.join(pagesOutDir, options.paths.entrypointPath)]));
 
 	/**
 	 * Injects vendor bundle into js section and all css files into css section.
 	 */
 	gulp.task('pages', gulp.series('vendor', 'css', () => {
-		return gulp.src(PAGES_SRC_GLOB)
+		return gulp.src(options.paths.indexFile)
 			.pipe(plumber())
-			.pipe(inject(gulp.src('build/bundle/vendor.min.js', { read: false })))
-			.pipe(inject(gulp.src('build/css/*.css', { read: false })))
-			.pipe(pug({ pretty: true }))
-			.pipe(gulp.dest(PAGES_OUT_DIR))
+			.pipe(inject(gulp.src(`${pagesOutDir}/${options.paths.vendorBundlePath}`, { read: false })))
+			.pipe(inject(gulp.src(`${pagesOutDir}/css/**/*.css`, { read: false })))
+			.pipe(pug({
+				locals: { main: options.paths.mainModule, ...options },
+				pretty: true
+			}))
+			.pipe(gulp.dest(pagesOutDir))
 			.pipe(connect.reload());
 	}));
 
 	/**
 	 * Injects vendor bundle, app bundle into js section and all css into css section.
 	 */
-	gulp.task('pages:prod', gulp.series('vendor', 'app:bundle', 'css:bundle', () => {
-		let vendor = gulp.src('build/bundle/vendor.min.js', { read: false });
-		let app = gulp.src('build/bundle/app.min.js', { read: false });
+	gulp.task('pages:bundle', gulp.series('vendor', 'app:bundle', 'css:bundle', () => {
+		const vendor = gulp.src(`${pagesOutDir}/${options.paths.vendorBundlePath}`, {
+			read: false,
+			basedir: pagesOutDir
+		});
+		const app = gulp.src(`${pagesOutDir}/${options.paths.appBundlePath}`, {
+			read: false,
+			basedir: pagesOutDir
+		});
 
-		return gulp.src(PAGES_SRC_GLOB)
+		return gulp.src(options.paths.indexFile)
 			.pipe(plumber())
 			.pipe(inject(series(vendor, app), {
 				// transform: (filepath) => `script(inline, src='${filepath}')`
 			}))
-			.pipe(inject(gulp.src('build/css/*.css', { read: false }), {
+			.pipe(inject(gulp.src(`${pagesOutDir}/css/**/*.css`, {
+				read: false,
+				basedir: pagesOutDir
+			}), {
 				// transform: (filepath) => `link(inline, rel='stylesheet', href='${filepath}')`
 			}))
-			.pipe(pug())
+			.pipe(pug({
+				locals: { main: options.paths.productionModule, ...options },
+			}))
 			.pipe(inline({
 				rootpath: '.'
 			}))
-			.pipe(gulp.dest(PAGES_OUT_DIR))
-			.pipe(connect.reload());
+			.pipe(gulp.dest(pagesOutDir));
 	}));
 
-	gulp.task('pages:watch', () => gulp.watch(PAGES_SRC_GLOB, gulp.task('pages')));
+	gulp.task('pages:watch', () => gulp.watch(options.paths.indexFile, gulp.task('pages')));
 
 };

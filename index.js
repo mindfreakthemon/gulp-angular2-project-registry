@@ -24,6 +24,7 @@ class CustomRegistry extends DefaultRegistry {
 		}, options);
 
 		this.options.paths = Object.assign({
+			indexFile: 'assets/index.pug',
 			sourceDir: 'app',
 			cssDir: 'assets/styles',
 			buildDir: 'build',
@@ -34,7 +35,9 @@ class CustomRegistry extends DefaultRegistry {
 			cssBundlePath: 'bundle/bundle.min.css',
 			vendorBundlePath: 'bundle/vendor.min.js',
 
-			entrypointPath: 'index.html'
+			entrypointPath: 'index.html',
+			mainModule: 'main',
+			productionModule: 'main-aot'
 
 		}, this.options.paths);
 
@@ -43,7 +46,6 @@ class CustomRegistry extends DefaultRegistry {
 		}, this.options.autoprefixer);
 	}
 
-
 	init(gulp) {
 		css(gulp, this.options);
 		styles(gulp, this.options);
@@ -51,19 +53,28 @@ class CustomRegistry extends DefaultRegistry {
 		vendor(gulp, this.options);
 		app(gulp, this.options);
 		connect(gulp, this.options);
+		pages(gulp, this.options);
+		clean(gulp, this.options);
 		statics(gulp);
-		pages(gulp);
-		clean(gulp);
 		test(gulp);
 		tslint(gulp);
 
 		gulp.task('compile', gulp.parallel('statics', 'app', 'templates', 'styles', 'css', 'pages'));
-		gulp.task('compile:prod', gulp.parallel('statics', 'pages:prod'));
+		gulp.task('compile:bundle', gulp.parallel('statics', 'pages:bundle'));
 
-		gulp.task('watch', gulp.parallel('css:watch', 'templates:watch', 'css:watch', 'styles:watch', 'app:watch', 'pages:watch', 'statics:watch'));
+		gulp.task('watch', gulp.parallel(
+			'css:watch',
+			'templates:watch',
+			'css:watch',
+			'styles:watch',
+			'app:watch',
+			'pages:watch',
+			'statics:watch',
+			'vendor:watch'
+		));
 
-		gulp.task('dev', gulp.series('clean', gulp.parallel('vendor', 'compile', 'connect')));
-		gulp.task('prod', gulp.series('clean', gulp.parallel('vendor', 'compile:prod', 'connect')));
+		gulp.task('dev', gulp.series('clean', gulp.parallel('vendor', 'compile'), gulp.parallel('watch', 'connect')));
+		gulp.task('bundle', gulp.series('clean', gulp.parallel('vendor', 'compile:bundle'), 'connect'));
 	}
 }
 

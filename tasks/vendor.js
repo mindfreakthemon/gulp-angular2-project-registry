@@ -15,7 +15,13 @@ module.exports = (gulp, options) => {
 	gulp.task('vendor', () => {
 		return gulp.src(STATIC_VENDOR_LIST.concat(options.vendors), { base: 'node_modules' })
 			.pipe(concat(options.paths.vendorBundlePath))
-			.pipe(uglify())
+			.pipe(uglify({
+				output: {
+					beautify: false
+				}
+			}))
 			.pipe(gulp.dest(options.paths.buildDir));
 	});
+
+	gulp.task('vendor:watch', () => gulp.watch(STATIC_VENDOR_LIST.concat(options.vendors), gulp.task('vendor')));
 };

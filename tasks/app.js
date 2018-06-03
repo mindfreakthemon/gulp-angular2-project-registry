@@ -5,7 +5,7 @@ const embed = require('gulp-inline-ng2-template');
 const del = require('del');
 const path = require('path');
 const Builder = require('systemjs-builder');
-
+const ngc = require('@angular/compiler-cli');
 
 module.exports = (gulp, options) => {
 	const appSrcGlob = `${options.paths.sourceDir}/**/*.ts`;
@@ -20,7 +20,7 @@ module.exports = (gulp, options) => {
 	 * Compiles typescript application and copies it to app dir.
 	 */
 	gulp.task('app', () => {
-		return gulp.src([appSrcGlob])
+		return gulp.src([appSrcGlob, `!${options.paths.sourceDir}/${options.paths.productionModule}.ts`])
 			.pipe(plumber())
 			.pipe(project())
 			.pipe(gulp.dest(appOutDir))
@@ -39,10 +39,34 @@ module.exports = (gulp, options) => {
 			.pipe(gulp.dest(appOutDir));
 	}));
 
+	gulp.task('app:compile', gulp.series('styles', 'templates', () => {
+		return gulp.src([appSrcGlob])
+			.pipe(gulp.dest(appOutDir))
+			.pipe(embed({
+				target: 'es6',
+				useRelativePaths: true
+			}))
+			.pipe(gulp.dest(appOutDir));
+	}));
+
+	gulp.task('app:ngc', gulp.series('app:compile', (done) => {
+		const config = ngc.readConfiguration('tsconfig.json');
+
+		config.rootNames = [`${options.paths.buildDir}/app/${options.paths.productionModule}.ts`];
+		config.options.genDir = options.paths.buildDir;
+		config.options.basePath = '.';
+
+		const result = ngc.performCompilation(config);
+
+		result.program.emit();
+
+		done()
+	}));
+
 	/**
 	 * Bundles application into one file, along with RxJS and Angular2.
 	 */
-	gulp.task('app:bundle', gulp.series('app:embed', 'vendor', () => {
+	gulp.task('app:bundle', gulp.series('app:ngc', 'vendor', () => {
 		const builder = new Builder('.', path.resolve(__dirname, '..', 'config/systemjs.base-config.js'));
 
 		builder.config({
@@ -51,7 +75,7 @@ module.exports = (gulp, options) => {
 			},
 			packages: {
 				app: {
-					main: 'main.js',
+					main: options.paths.productionModule,
 					defaultExtension: 'js'
 				}
 			}
