@@ -7,8 +7,8 @@ const autoprefixer = require('autoprefixer');
 
 
 module.exports = (gulp, options) => {
-	const stylesSrcGlob = `${options.paths.sourceDir}/**/*.styl`;
-	const stylesOutDir = `${options.paths.buildDir}/app`;
+	const stylesSrcGlob = `${options.sourcesDir}/**/*.styl`;
+	const stylesOutDir = `${options.buildDir}/app`;
 
 	gulp.task('styles:clean', () => del([`${stylesOutDir}/**/*.styl`]));
 
@@ -16,7 +16,7 @@ module.exports = (gulp, options) => {
 	 * Compiles templates.
 	 */
 	gulp.task('styles', () => {
-		return gulp.src(stylesSrcGlob, { base: options.paths.sourceDir })
+		return gulp.src(stylesSrcGlob, { base: options.sourcesDir })
 			.pipe(plumber())
 			.pipe(stylus({ pretty: true }))
 			.pipe(postcss([

@@ -5,8 +5,8 @@ let del = require('del');
 
 
 module.exports = (gulp, options) => {
-	const templatesSrcGlob = `${options.paths.sourceDir}/**/*.pug`;
-	const templatesOutDir = `${options.paths.buildDir}/app`;
+	const templatesSrcGlob = `${options.sourcesDir}/**/*.pug`;
+	const templatesOutDir = `${options.buildDir}/app`;
 
 	gulp.task('templates:clean', () => del([`${templatesOutDir}/**/*.html`]));
 
@@ -14,7 +14,7 @@ module.exports = (gulp, options) => {
 	 * Compiles templates.
 	 */
 	gulp.task('templates', gulp.series('templates:clean', () => {
-		return gulp.src(templatesSrcGlob, { base: options.paths.sourceDir })
+		return gulp.src(templatesSrcGlob, { base: options.sourcesDir })
 			.pipe(plumber())
 			.pipe(pug({ pretty: true }))
 			.pipe(gulp.dest(templatesOutDir))

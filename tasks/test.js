@@ -3,27 +3,27 @@ const plumber = require('gulp-plumber');
 const mocha = require('gulp-spawn-mocha');
 const del = require('del');
 
-const TEST_SRC_GLOB = 'test/**/*.ts';
-const TEST_OUT_DIR = 'build/test';
 
-module.exports = (gulp) => {
+module.exports = (gulp, options) => {
+	const testsSrcGlob = `${options.testsDir}/**/*.ts`;
+	const testsOutDir = `${options.buildDir}/tests`;
 
-	gulp.task('test:clean', () => del([TEST_OUT_DIR]));
+	const project = typescript.createProject(options.tsconfigPath);
+
+	gulp.task('test:clean', () => del([testsOutDir]));
 
 	/**
 	 * Compiles typescript application and copies it to app dir.
 	 */
-	gulp.task('test:compile', gulp.series('test:clean', () => {
-		let project = typescript.createProject(path.join(process.cwd(), 'tsconfig.json'));
-
-		return gulp.src([TEST_SRC_GLOB])
+	gulp.task('test:compile', () => {
+		return gulp.src([testsSrcGlob])
 			.pipe(plumber())
 			.pipe(project())
-			.pipe(gulp.dest(TEST_OUT_DIR));
-	}));
+			.pipe(gulp.dest(testsOutDir));
+	});
 
 	gulp.task('test', gulp.series('test:compile', () => {
-		return gulp.src([`${TEST_OUT_DIR}/**/*.js`], { read: false })
+		return gulp.src([`${testsOutDir}/**/*.js`], { read: false })
 			.pipe(mocha({
 				// debugBrk: DEBUG,
 				// r: 'node_modules/chai/chai.js',
@@ -32,5 +32,5 @@ module.exports = (gulp) => {
 			}));
 	}));
 
-	gulp.task('test:watch', () => gulp.watch(TEST_SRC_GLOB, gulp.task('test')));
+	gulp.task('test:watch', () => gulp.watch(testsSrcGlob, gulp.task('test')));
 };

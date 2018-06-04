@@ -1,20 +1,21 @@
-let connect = require('gulp-connect');
-let del = require('del');
+const connect = require('gulp-connect');
+const del = require('del');
 
-const STATICS_SRC_GLOB = 'assets/statics/**/*';
-const STATICS_OUT_DIR = 'build/statics';
 
-module.exports = (gulp) =>{
-	gulp.task('statics:clean', () => del([STATICS_OUT_DIR]));
+module.exports = (gulp, options) => {
+	const staticsSrcGlob = `${options.staticsDir}/**/*`;
+	const staticsOutDir = `${options.buildDir}/statics`;
+
+	gulp.task('statics:clean', () => del([staticsSrcGlob]));
 
 	/**
 	 * Copies all statics to statics dir.
 	 */
 	gulp.task('statics', () => {
-		return gulp.src(STATICS_SRC_GLOB)
-			.pipe(gulp.dest(STATICS_OUT_DIR))
+		return gulp.src(staticsSrcGlob)
+			.pipe(gulp.dest(staticsOutDir))
 			.pipe(connect.reload());
 	});
 
-	gulp.task('statics:watch', () => gulp.watch(STATICS_SRC_GLOB, gulp.task('statics')));
+	gulp.task('statics:watch', () => gulp.watch(staticsSrcGlob, gulp.task('statics')));
 };

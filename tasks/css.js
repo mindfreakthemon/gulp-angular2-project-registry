@@ -8,8 +8,8 @@ const autoprefixer = require('autoprefixer');
 
 
 module.exports = (gulp, options) => {
-	const cssSrcGlob = `${options.paths.cssDir}/**/*.styl`;
-	const cssOutDir = `${options.paths.buildDir}/css`;
+	const cssSrcGlob = `${options.cssDir}/**/*.styl`;
+	const cssOutDir = `${options.buildDir}/css`;
 
 	gulp.task('css:clean', () => del([cssOutDir]));
 
@@ -47,8 +47,8 @@ module.exports = (gulp, options) => {
 			.pipe(postcss([
 				autoprefixer(options.autoprefixer)
 			]))
-			.pipe(concat(options.paths.cssBundlePath))
-			.pipe(gulp.dest(options.paths.buildDir));
+			.pipe(concat(options.cssBundlePath))
+			.pipe(gulp.dest(options.buildDir));
 	});
 
 	gulp.task('css:watch', () => gulp.watch(cssSrcGlob, gulp.task('css')));

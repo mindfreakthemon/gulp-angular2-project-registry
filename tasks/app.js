@@ -8,11 +8,11 @@ const Builder = require('systemjs-builder');
 const ngc = require('@angular/compiler-cli');
 
 module.exports = (gulp, options) => {
-	const appSrcGlob = `${options.paths.sourceDir}/**/*.ts`;
-	const appOutDir = `${options.paths.buildDir}/app`;
-	const bundlePath = `${options.paths.buildDir}/${options.paths.appBundlePath}`;
+	const appSrcGlob = `${options.sourcesDir}/**/*.ts`;
+	const appOutDir = `${options.buildDir}/app`;
+	const bundlePath = `${options.buildDir}/${options.appBundlePath}`;
 
-	const project = typescript.createProject(options.paths.tsconfigPath);
+	const project = typescript.createProject(options.tsconfigPath);
 
 	gulp.task('app:clean', () => del([`${appOutDir}/**/*.js`]));
 
@@ -20,7 +20,7 @@ module.exports = (gulp, options) => {
 	 * Compiles typescript application and copies it to app dir.
 	 */
 	gulp.task('app', () => {
-		return gulp.src([appSrcGlob, `!${options.paths.sourceDir}/${options.paths.productionModule}.ts`])
+		return gulp.src([appSrcGlob, `!${options.sourcesDir}/${options.productionModule}.ts`])
 			.pipe(plumber())
 			.pipe(project())
 			.pipe(gulp.dest(appOutDir))
@@ -52,8 +52,8 @@ module.exports = (gulp, options) => {
 	gulp.task('app:ngc', gulp.series('app:compile', (done) => {
 		const config = ngc.readConfiguration('tsconfig.json');
 
-		config.rootNames = [`${options.paths.buildDir}/app/${options.paths.productionModule}.ts`];
-		config.options.genDir = options.paths.buildDir;
+		config.rootNames = [`${options.buildDir}/app/${options.productionModule}.ts`];
+		config.options.genDir = options.buildDir;
 		config.options.basePath = '.';
 
 		const result = ngc.performCompilation(config);
@@ -75,7 +75,7 @@ module.exports = (gulp, options) => {
 			},
 			packages: {
 				app: {
-					main: options.paths.productionModule,
+					main: options.productionModule,
 					defaultExtension: 'js'
 				}
 			}

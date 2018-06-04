@@ -1,7 +1,7 @@
 doctype html
 html
 	head
-		title Self Test
+		title Default Title
 		meta(charset='utf-8')
 		meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
 		meta(http-equiv='x-ua-compatible', content='ie=edge')
@@ -12,6 +12,6 @@ html
 		//- inject:js
 		//- endinject
 		script.
-			System.config({ map: { app: '#{paths.buildDir}/app' } });
+			System.config({ map: { app: '#{buildDir}/app' } });
 			System.config({ packages: { app: { main: '#{main}', defaultExtension: 'js' } } });
 			System.import('app');

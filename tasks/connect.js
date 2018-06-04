@@ -4,7 +4,7 @@ module.exports = (gulp, options) => {
 
 	gulp.task('connect', () => {
 		return connect.server({
-			root: [options.paths.buildDir, '.'],
+			root: [options.buildDir, '.'],
 			port: options.port,
 			livereload: true
 		});

@@ -11,6 +11,7 @@ const connect = require('./tasks/connect');
 const clean = require('./tasks/clean');
 const test = require('./tasks/test');
 const tslint = require('./tasks/tslint');
+const provision = require('./tasks/provision');
 
 class CustomRegistry extends DefaultRegistry {
 
@@ -20,13 +21,13 @@ class CustomRegistry extends DefaultRegistry {
 
 		this.options = Object.assign({
 			vendors: [],
-			port: 8080
-		}, options);
+			port: 8080,
 
-		this.options.paths = Object.assign({
 			indexFile: 'assets/index.pug',
-			sourceDir: 'app',
+			sourcesDir: 'app',
+			testsDir: 'tests',
 			cssDir: 'assets/styles',
+			staticsDir: 'assets/statics',
 			buildDir: 'build',
 
 			tsconfigPath: 'tsconfig.json',
@@ -35,15 +36,18 @@ class CustomRegistry extends DefaultRegistry {
 			cssBundlePath: 'bundle/bundle.min.css',
 			vendorBundlePath: 'bundle/vendor.min.js',
 
-			entrypointPath: 'index.html',
 			mainModule: 'main',
 			productionModule: 'main-aot'
 
-		}, this.options.paths);
+		}, options);
 
 		this.options.autoprefixer = Object.assign({
 			browsers: ['last 2 versions']
 		}, this.options.autoprefixer);
+
+		this.options.tslintOptions = Object.assign({
+			formatter: 'verbose'
+		}, this.options.tslintOptions);
 	}
 
 	init(gulp) {
@@ -55,9 +59,10 @@ class CustomRegistry extends DefaultRegistry {
 		connect(gulp, this.options);
 		pages(gulp, this.options);
 		clean(gulp, this.options);
-		statics(gulp);
-		test(gulp);
-		tslint(gulp);
+		statics(gulp, this.options);
+		tslint(gulp, this.options);
+		test(gulp, this.options);
+		provision(gulp, this.options);
 
 		gulp.task('compile', gulp.parallel('statics', 'app', 'templates', 'styles', 'css', 'pages'));
 		gulp.task('compile:bundle', gulp.parallel('statics', 'pages:bundle'));

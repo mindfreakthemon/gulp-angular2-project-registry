@@ -1,25 +1,19 @@
-let tslint = require('gulp-tslint');
-let plumber = require('gulp-plumber');
+const tslint = require('gulp-tslint');
+const plumber = require('gulp-plumber');
 
-const TEST_SRC_GLOB = 'test/**/*.ts';
-const APP_SRC_GLOB = 'app/**/*.ts';
 
-const TSLINT_OPTIONS = {
-	formatter: 'verbose'
-};
-
-module.exports = (gulp) => {
+module.exports = (gulp, options) => {
 	gulp.task('tslint:app', () => {
-		return gulp.src([APP_SRC_GLOB])
+		return gulp.src([`${options.sourcesDir}/**/*.ts`])
 			.pipe(plumber())
-			.pipe(tslint(TSLINT_OPTIONS))
+			.pipe(tslint(options.tslintOptions))
 			.pipe(tslint.report());
 	});
 
 	gulp.task('tslint:test', () => {
-		return gulp.src([TEST_SRC_GLOB])
+		return gulp.src([`${options.testsDir}/**/*.ts`])
 			.pipe(plumber())
-			.pipe(tslint(TSLINT_OPTIONS))
+			.pipe(tslint(options.tslintOptions))
 			.pipe(tslint.report());
 	});
 

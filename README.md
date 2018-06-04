@@ -42,3 +42,4 @@
 | watch ||
 | dev ||
 | bundle ||
+| provision ||
