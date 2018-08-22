@@ -10,7 +10,8 @@ System.config({
 		'@angular/forms': 'npm:@angular/forms/bundles/forms.umd.js',
 
 		'rxjs': 'npm:rxjs',
-		'zone.js': 'npm:zone.js/dist/zone.min.js'
+		'zone.js': 'npm:zone.js/dist/zone.min.js',
+		'reflect-metadata': 'npm:reflect-metadata/Reflect.js'
 	},
 	paths: {
 		'npm:': 'node_modules/'
