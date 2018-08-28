@@ -1,3 +1,7 @@
+[![dependencies][deps-image]][deps-url] [![dev-dependencies][dev-deps-image]][dev-deps-url]
+
+[![NPM][npm-image]][npm-url]
+
 # Gulp Angular2 Project Registry
 
 This registry supplies all necessary tasks to build, test and lint angular2 web application.
@@ -124,3 +128,10 @@ Default: `'main-aot`
 | dev | Runs `clean`, `compile`, `connect` and `watch`. |
 | bundle | Runs `clean`, `compile:bundle` and `connect`. |
 | provision | Copies default structure to the current directory (without overwrite). |
+
+[deps-image]: https://img.shields.io/david/mindfreakthemon/gulp-angular2-project-registry.svg?style=flat-square
+[deps-url]: https://david-dm.org/mindfreakthemon/gulp-angular2-project-registry
+[dev-deps-image]: https://img.shields.io/david/dev/mindfreakthemon/gulp-angular2-project-registry.svg?style=flat-square
+[dev-deps-url]: https://david-dm.org/mindfreakthemon/gulp-angular2-project-registry?type=dev
+[npm-image]: https://nodei.co/npm/gulp-angular2-project-registry.png?downloads=true
+[npm-url]: https://npmjs.org/package/gulp-angular2-project-registry
