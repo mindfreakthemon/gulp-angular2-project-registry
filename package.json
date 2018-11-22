@@ -1,7 +1,7 @@
 {
 	"name": "gulp-angular2-project-registry",
 	"description": "Collection of tasks to build, deploy and serve angular2 web application.",
-	"version": "2.0.6",
+	"version": "2.1.0",
 	"license": "MIT",
 	"main": "index.js",
 	"repository": "https://github.com/mindfreakthemon/gulp-angular2-project-registry",
@@ -35,7 +35,7 @@
 		"gulp-concat": "^2.6.1",
 		"gulp-connect": "^5.5.0",
 		"gulp-inject": "^4.3.2",
-		"gulp-inline-ng2-template": "^4.1.0",
+		"gulp-inline-ng2-template": "^5.0.1",
 		"gulp-inline-source": "^3.1.0",
 		"gulp-plumber": "^1.2.0",
 		"gulp-postcss": "^7.0.1",

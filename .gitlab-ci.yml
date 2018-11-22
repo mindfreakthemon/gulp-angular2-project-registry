@@ -1,0 +1,32 @@
+image: node:10.13.0-alpine
+
+stages:
+  - build
+  - publish
+
+cache:
+  key: $CI_COMMIT_REF_NAME
+  paths:
+    - node_modules/
+  untracked: false
+
+before_script:
+  - npm i
+
+build-development:
+  stage: build
+  script:
+    - npx gulp compile
+
+build-bundle:
+  stage: build
+  script:
+    - npx gulp compile:bundle
+
+publish:
+  stage: publish
+  script:
+    - npm publish
+  only:
+    refs:
+      - tags
