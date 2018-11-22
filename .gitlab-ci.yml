@@ -11,7 +11,9 @@ cache:
   untracked: false
 
 before_script:
+  - apk add jq
   - npm i
+  - jq -r '.peerDependencies | to_entries[] | .key + "@" + .value' package.json | xargs npm i
 
 build-development:
   stage: build
