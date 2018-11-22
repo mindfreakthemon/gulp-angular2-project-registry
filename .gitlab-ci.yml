@@ -26,6 +26,8 @@ build-bundle:
     - npx gulp compile:bundle
 
 publish:
+  before_script:
+    - 'echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc'
   stage: publish
   script:
     - npm publish
