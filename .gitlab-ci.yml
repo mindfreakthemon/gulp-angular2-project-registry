@@ -13,7 +13,7 @@ cache:
 before_script:
   - apk add jq
   - npm i
-  - jq -r '.peerDependencies | to_entries[] | .key + "@" + .value' package.json | xargs npm i
+  - jq -r '.peerDependencies | to_entries[] | .key + "@" + .value' package.json | xargs npm i --no-save
 
 build-development:
   stage: build

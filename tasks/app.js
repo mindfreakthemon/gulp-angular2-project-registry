@@ -52,7 +52,7 @@ module.exports = (gulp, options) => {
 	gulp.task('app:ngc', gulp.series('app:compile', (done) => {
 		const config = ngc.readConfiguration('tsconfig.json');
 
-		config.rootNames = [`app/${options.productionModule}.ts`];
+		config.rootNames = [`${options.buildDir}/app/${options.productionModule}.ts`];
 		config.options.genDir = options.buildDir;
 		config.options.basePath = '.';
 
