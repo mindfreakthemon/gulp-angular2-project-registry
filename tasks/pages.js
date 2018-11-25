@@ -45,12 +45,14 @@ module.exports = (gulp, options) => {
 		return gulp.src(options.indexFile)
 			.pipe(plumber())
 			.pipe(inject(series(vendor, app), {
+				addRootSlash: false
 				// transform: (filepath) => `script(inline, src='${filepath}')`
 			}))
 			.pipe(inject(gulp.src(`${pagesOutDir}/css/**/*.css`, {
 				read: false,
 				basedir: pagesOutDir
 			}), {
+				addRootSlash: false
 				// transform: (filepath) => `link(inline, rel='stylesheet', href='${filepath}')`
 			}))
 			.pipe(pug({

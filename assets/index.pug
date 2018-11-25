@@ -12,6 +12,7 @@ html
 		//- inject:js
 		//- endinject
 		script.
+			System.config({ baseURL: './' });
 			System.config({ map: { app: '#{buildDir}/app' } });
 			System.config({ packages: { app: { main: '#{main}', defaultExtension: 'js' } } });
 			System.import('app');
