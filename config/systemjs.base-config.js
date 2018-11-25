@@ -10,6 +10,7 @@ System.config({
 		'@angular/forms': 'npm:@angular/forms/bundles/forms.umd.js',
 
 		'rxjs': 'npm:rxjs',
+		'rxjs-compat': 'npm:rxjs-compat',
 		'zone.js': 'npm:zone.js/dist/zone.min.js',
 		'reflect-metadata': 'npm:reflect-metadata/Reflect.js'
 	},
@@ -19,6 +20,9 @@ System.config({
 	packages: {
 		'rxjs': {
 			main: 'index.js',
+			defaultExtension: 'js'
+		},
+		'rxjs-compat': {
 			defaultExtension: 'js'
 		},
 		'rxjs/operators': {
