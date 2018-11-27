@@ -34,25 +34,24 @@ module.exports = (gulp, options) => {
 	 */
 	gulp.task('pages:bundle', gulp.series('vendor', 'app:bundle', 'css:bundle', () => {
 		const vendor = gulp.src(`${pagesOutDir}/${options.vendorBundlePath}`, {
-			read: false,
-			basedir: pagesOutDir
+			read: false
 		});
 		const app = gulp.src(`${pagesOutDir}/${options.appBundlePath}`, {
-			read: false,
-			basedir: pagesOutDir
+			read: false
 		});
 
 		return gulp.src(options.indexFile)
 			.pipe(plumber())
 			.pipe(inject(series(vendor, app), {
-				addRootSlash: false
+				addRootSlash: false,
+				ignorePath: pagesOutDir
 				// transform: (filepath) => `script(inline, src='${filepath}')`
 			}))
 			.pipe(inject(gulp.src(`${pagesOutDir}/css/**/*.css`, {
-				read: false,
-				basedir: pagesOutDir
+				read: false
 			}), {
-				addRootSlash: false
+				addRootSlash: false,
+				ignorePath: pagesOutDir
 				// transform: (filepath) => `link(inline, rel='stylesheet', href='${filepath}')`
 			}))
 			.pipe(pug({
