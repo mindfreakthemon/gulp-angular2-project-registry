@@ -1,4 +1,4 @@
-image: node:10.13.0-alpine
+image: registry.middle-of-nowhere.name:443/docker-images/npm-packager:latest
 
 stages:
   - build
@@ -10,19 +10,13 @@ cache:
     - node_modules/
   untracked: false
 
-before_script:
-  - apk add jq
-  - npm i
-  - jq -r '.peerDependencies | to_entries[] | .key + "@" + .value' package.json | xargs npm i --no-save
-
-build-development:
+build:
   stage: build
   script:
+    - npm i
+    - jq -r '.peerDependencies | to_entries[] | .key + "@" + .value' package.json | xargs npm i --no-save
     - npx gulp compile
-
-build-bundle:
-  stage: build
-  script:
+    - npx gulp clean
     - npx gulp compile:bundle
 
 publish:
