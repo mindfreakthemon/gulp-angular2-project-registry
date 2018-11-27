@@ -19,8 +19,14 @@ module.exports = (gulp, options) => {
 	gulp.task('pages', gulp.series('vendor', 'css', () => {
 		return gulp.src(options.indexFile)
 			.pipe(plumber())
-			.pipe(inject(gulp.src(`${pagesOutDir}/${options.vendorBundlePath}`, { read: false })))
-			.pipe(inject(gulp.src(`${pagesOutDir}/css/**/*.css`, { read: false })))
+			.pipe(inject(gulp.src(`${pagesOutDir}/${options.vendorBundlePath}`, { read: false }), {
+				addRootSlash: options.addRootSlash,
+				ignorePath: pagesOutDir
+			}))
+			.pipe(inject(gulp.src(`${pagesOutDir}/css/**/*.css`, { read: false }), {
+				addRootSlash: options.addRootSlash,
+				ignorePath: pagesOutDir
+			}))
 			.pipe(pug({
 				locals: { main: options.mainModule, ...options },
 				pretty: true
@@ -43,19 +49,21 @@ module.exports = (gulp, options) => {
 		return gulp.src(options.indexFile)
 			.pipe(plumber())
 			.pipe(inject(series(vendor, app), {
-				addRootSlash: false,
+				addRootSlash: options.addRootSlash,
 				ignorePath: pagesOutDir
+				// TODO make optional the ability to inline into the page
 				// transform: (filepath) => `script(inline, src='${filepath}')`
 			}))
-			.pipe(inject(gulp.src(`${pagesOutDir}/css/**/*.css`, {
+			.pipe(inject(gulp.src(`${pagesOutDir}/${options.cssBundlePath}`, {
 				read: false
 			}), {
-				addRootSlash: false,
+				addRootSlash: options.addRootSlash,
 				ignorePath: pagesOutDir
+				// TODO make optional the ability to inline into the page
 				// transform: (filepath) => `link(inline, rel='stylesheet', href='${filepath}')`
 			}))
 			.pipe(pug({
-				locals: { main: options.productionModule, ...options },
+				locals: { main: options.productionModule, ...options }
 			}))
 			.pipe(inline({
 				rootpath: '.'

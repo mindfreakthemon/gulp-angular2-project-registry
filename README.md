@@ -14,6 +14,9 @@ Supports generating both development and production bundles to be created.
 Type: `string[]`
 
 Default: `[]`
+
+Array of javascript files optionally to be included into vendors bundle.
+Useful if you have third-party libraries that you rely on in your project.
  
 ##### `port`
 
@@ -50,6 +53,8 @@ Default: `'assets/styles'`
 Type: `string`
 
 Default: `'assets/statics'`
+
+Path to the folder that contains all static resources that will be copied over to the `buildDir`.
 
 ##### `buildDir`
  
@@ -91,7 +96,16 @@ Default: `'main'`
  
 Type: `string`
 
-Default: `'main-aot`
+Default: `'main-aot'`
+
+##### `addRootSlash`
+ 
+Type: `string`
+
+Default: `false`
+
+Whether to add the root slash to all injected resources (css and js).
+Useful if you run your application not from '/'.
 
 ## Use Cases
 

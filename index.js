@@ -36,6 +36,8 @@ class CustomRegistry extends DefaultRegistry {
 			cssBundlePath: 'bundle/bundle.min.css',
 			vendorBundlePath: 'bundle/vendor.min.js',
 
+			addRootSlash: false,
+
 			mainModule: 'main',
 			productionModule: 'main-aot'
 
