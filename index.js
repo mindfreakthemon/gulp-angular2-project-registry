@@ -39,7 +39,9 @@ class CustomRegistry extends DefaultRegistry {
 			addRootSlash: false,
 
 			mainModule: 'main',
-			productionModule: 'main-aot'
+			productionModule: 'main-aot',
+
+			map: {}
 
 		}, options);
 

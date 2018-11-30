@@ -107,6 +107,14 @@ Default: `false`
 Whether to add the root slash to all injected resources (css and js).
 Useful if you run your application not from '/'.
 
+##### `map`
+
+Type: `object`
+
+Default: `{}`
+
+Specify additional map for SystemJS configuration in case you want to load third-party modules.
+
 ## Use Cases
 
 ## Tasks

@@ -70,9 +70,9 @@ module.exports = (gulp, options) => {
 		const builder = new Builder('.', path.resolve(__dirname, '..', 'config/systemjs.base-config.js'));
 
 		builder.config({
-			map: {
+			map: Object.assign({
 				app: appOutDir
-			},
+			}, options.map),
 			packages: {
 				app: {
 					main: options.productionModule,
