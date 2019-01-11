@@ -23,11 +23,11 @@ class CustomRegistry extends DefaultRegistry {
 			vendors: [],
 			port: 8080,
 
-			indexFile: 'assets/index.pug',
+			indexFile: 'index.pug',
 			sourcesDir: 'app',
 			testsDir: 'tests',
-			cssDir: 'assets/styles',
-			staticsDir: 'assets/statics',
+			cssDir: 'styles',
+			staticsDir: 'statics',
 			buildDir: 'build',
 
 			tsconfigPath: 'tsconfig.json',

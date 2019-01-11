@@ -18,6 +18,7 @@ build:
     - npx gulp compile
     - npx gulp clean
     - npx gulp compile:bundle
+    - npx gulp test
 
 publish:
   before_script:

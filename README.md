@@ -4,37 +4,70 @@
 
 # Gulp Angular2 Project Registry
 
-This registry supplies all necessary tasks to build, test and lint angular2 web application.
+This registry supplies all necessary tasks to build, test and lint angular 6 web application.
 Supports generating both development and production bundles to be created.
+
+
+## How to start
+
+```npm install gulp-angular2-project-registry```
+
+Then create a `gulpfile.js` in project root and put the following contents there:
+
+```js
+const gulp = require('gulp');
+const CustomRegistry = require('gulp-angular2-project-registry');
+
+gulp.registry(new CustomRegistry());
+```
+
+Run `npx gulp provision` and registry task will create a default directory structure for the application.
+
+Run `npx dev` for running a development environment. See task list below to see what else is available in the registry.
 
 ## Configuration
 
-##### `vendors`
+All configuration is relative to the project root unless otherwise mentioned.
 
-Type: `string[]`
-
-Default: `[]`
-
-Array of javascript files optionally to be included into vendors bundle.
-Useful if you have third-party libraries that you rely on in your project.
- 
 ##### `port`
 
 Type: `number`
 
 Default: `8080`
 
+Port for `dev` and `bundle` tasks server.
+
 ##### `indexFile`
 
 Type: `string`
  
-Default: `'assets/index.pug'`
+Default: `'index.pug'`
+
+SPA entry point file, processed by [pug](https://pugjs.org/api/getting-started.html).
 
 ##### `sourcesDir`
  
 Type: `string`
 
 Default: `'app'`
+
+Directory that contains application sources, as well as `mainModule` and `productionModule` files.
+
+##### `mainModule`
+ 
+Type: `string`
+
+Default: `'main'`
+
+Bootstrap file for Angular SPA in development mode. Path is relative to `sourcesDir`.
+
+##### `productionModule`
+ 
+Type: `string`
+
+Default: `'main-aot'`
+
+Bootstrap file for Angular SPA in production mode. Path is relative to `sourcesDir`.
 
 ##### `testsDir`
  
@@ -46,15 +79,34 @@ Default: `'tests'`
  
 Type: `string`
 
-Default: `'assets/styles'`
+Default: `'styles'`
+
+Path that contains styles processed by [stylus](http://stylus-lang.com) that will be included in `indexFile`.
 
 ##### `staticsDir`
  
 Type: `string`
 
-Default: `'assets/statics'`
+Default: `'statics'`
 
 Path to the folder that contains all static resources that will be copied over to the `buildDir`.
+
+##### `vendors`
+
+Type: `string[]`
+
+Default: `[]`
+
+Array of javascript files optionally to be included into vendors bundle.
+Useful if you have third-party libraries that you rely on in your project.
+
+##### `map`
+
+Type: `object`
+
+Default: `{}`
+
+Specify additional map for SystemJS configuration in case you want to load third-party modules.
 
 ##### `buildDir`
  
@@ -74,11 +126,15 @@ Type: `string`
 
 Default: `'bundle/app.min.js'`
 
+Path is relative to `buildDir`.
+
 ##### `cssBundlePath`
  
 Type: `string`
 
 Default: `'bundle/bundle.min.css'`
+
+Path is relative to `buildDir`.
 
 ##### `vendorBundlePath`
  
@@ -86,17 +142,7 @@ Type: `string`
 
 Default: `'bundle/vendor.min.js'`
 
-##### `mainModule`
- 
-Type: `string`
-
-Default: `'main'`
-
-##### `productionModule`
- 
-Type: `string`
-
-Default: `'main-aot'`
+Path is relative to `buildDir`.
 
 ##### `addRootSlash`
  
@@ -106,16 +152,6 @@ Default: `false`
 
 Whether to add the root slash to all injected resources (css and js).
 Useful if you run your application not from '/'.
-
-##### `map`
-
-Type: `object`
-
-Default: `{}`
-
-Specify additional map for SystemJS configuration in case you want to load third-party modules.
-
-## Use Cases
 
 ## Tasks
 

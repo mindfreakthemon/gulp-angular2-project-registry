@@ -67,7 +67,7 @@ module.exports = (gulp, options) => {
 	 * Bundles application into one file, along with RxJS and Angular2.
 	 */
 	gulp.task('app:bundle', gulp.series('app:ngc', 'vendor', () => {
-		const builder = new Builder('.', path.resolve(__dirname, '..', 'config/systemjs.base-config.js'));
+		const builder = new Builder('.', path.resolve(__dirname, '..', 'systemjs.base-config.js'));
 
 		builder.config({
 			map: Object.assign({

@@ -5,7 +5,7 @@ const path = require('path');
 
 const STATIC_VENDOR_LIST = [
 	'node_modules/systemjs/dist/system.js',
-	path.resolve(__dirname, '..', 'config/systemjs.base-config.js')
+	path.resolve(__dirname, '..', 'systemjs.base-config.js')
 ];
 
 module.exports = (gulp, options) => {

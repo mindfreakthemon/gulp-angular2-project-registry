@@ -1,7 +1,7 @@
 const path = require('path');
 
 
-module.exports = (gulp, options) => {
+module.exports = (gulp) => {
 	const baseDir = path.resolve(__dirname, '..');
 
 	/**
@@ -10,7 +10,9 @@ module.exports = (gulp, options) => {
 	gulp.task('provision', () => {
 		return gulp.src([
 			`${baseDir}/app/**/*`,
-			`${baseDir}/assets/**/*`,
+			`${baseDir}/styles/**/*`,
+			`${baseDir}/statics/**/*`,
+			`${baseDir}/index.pug`,
 			`${baseDir}/tsconfig.json`,
 			`${baseDir}/tslint.json`
 		], { base: baseDir })
