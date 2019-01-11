@@ -10,9 +10,9 @@ Supports generating both development and production bundles to be created.
 
 ## How to start
 
-```npm install gulp-angular2-project-registry```
+```npm install gulp gulp-angular2-project-registry```
 
-Then create a `gulpfile.js` in project root and put the following contents there:
+Then create a `gulpfile.js` in the project root and put the following content there:
 
 ```js
 const gulp = require('gulp');
@@ -23,7 +23,7 @@ gulp.registry(new CustomRegistry());
 
 Run `npx gulp provision` and registry task will create a default directory structure for the application.
 
-Run `npx dev` for running a development environment. See task list below to see what else is available in the registry.
+Run `npx gulp dev` for running a development environment. See task list below to see what else is available in the registry.
 
 ## Configuration
 
