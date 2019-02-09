@@ -1,5 +1,5 @@
 const concat = require('gulp-concat');
-const uglify = require('gulp-uglify');
+const terser = require('gulp-terser');
 const path = require('path');
 
 
@@ -13,13 +13,15 @@ module.exports = (gulp, options) => {
 	 * Copies vendors that are statically linked in html page.
 	 */
 	gulp.task('vendor', () => {
-		return gulp.src(STATIC_VENDOR_LIST.concat(options.vendors), { base: 'node_modules' })
+		let vendors = STATIC_VENDOR_LIST;
+
+		if (options.systemConfig) {
+			vendors = vendors.concat(options.systemConfig);
+		}
+
+		return gulp.src(vendors.concat(options.vendors), { base: 'node_modules' })
 			.pipe(concat(options.vendorBundlePath))
-			.pipe(uglify({
-				output: {
-					beautify: false
-				}
-			}))
+			.pipe(terser())
 			.pipe(gulp.dest(options.buildDir));
 	});
 

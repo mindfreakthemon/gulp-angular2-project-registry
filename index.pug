@@ -13,6 +13,6 @@ html
 		//- endinject
 		script.
 			System.config({ baseURL: './' });
-			System.config({ map: Object.assign({ app: '#{buildDir}/app' }, !{JSON.stringify(map)}) });
+			System.config({ map: { app: '#{buildDir}/app' }});
 			System.config({ packages: { app: { main: '#{main}', defaultExtension: 'js' } } });
 			System.import('app');

@@ -14,7 +14,6 @@ build:
   stage: build
   script:
     - npm i
-    - jq -r '.peerDependencies | to_entries[] | .key + "@" + .value' package.json | xargs npm i --no-save
     - npx gulp compile
     - npx gulp clean
     - npx gulp compile:bundle

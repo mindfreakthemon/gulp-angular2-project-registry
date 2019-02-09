@@ -41,7 +41,7 @@ class CustomRegistry extends DefaultRegistry {
 			mainModule: 'main',
 			productionModule: 'main-aot',
 
-			map: {}
+			systemConfig: null
 
 		}, options);
 

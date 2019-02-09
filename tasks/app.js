@@ -60,7 +60,7 @@ module.exports = (gulp, options) => {
 
 		result.program.emit();
 
-		done()
+		done();
 	}));
 
 	/**
@@ -69,10 +69,14 @@ module.exports = (gulp, options) => {
 	gulp.task('app:bundle', gulp.series('app:ngc', 'vendor', () => {
 		const builder = new Builder('.', path.resolve(__dirname, '..', 'systemjs.base-config.js'));
 
+		if (options.systemConfig) {
+			builder.loadConfigSync(options.systemConfig, true, true);
+		}
+
 		builder.config({
-			map: Object.assign({
+			map: {
 				app: appOutDir
-			}, options.map),
+			},
 			packages: {
 				app: {
 					main: options.productionModule,
